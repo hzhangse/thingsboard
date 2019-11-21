@@ -74,7 +74,7 @@ else
 fi
 
 source .env
-
+DATABASE=postgres
 kubectl apply -f tb-namespace.yml
 kubectl config set-context $(kubectl config current-context) --namespace=thingsboard
 
