@@ -1,0 +1,68 @@
+#
+# Copyright © 2016-2019 The Thingsboard Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+
+---
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: pgadmin4
+#  namespace: thingsboard
+  labels:
+    app: pgadmin4
+spec:
+  template:
+    metadata:
+      labels:
+        app: pgadmin4
+    spec:
+      containers:
+      - name: pgadmin4
+        imagePullPolicy: Always
+        image: dpage/pgadmin4
+        ports:
+        - containerPort: 80
+          name: pgadmin4-port
+        env:
+        - name: PGADMIN_DEFAULT_EMAIL
+          value: "rainbow954@163.com"
+        - name: PGADMIN_DEFAULT_PASSWORD
+          value: "admin123"
+        volumeMounts:
+        - mountPath: /var/lib/pgadmin4
+          name: pgadmin4-data          
+      volumes:
+      - name: pgadmin4-data
+        emptyDir: {}
+      restartPolicy: Always          
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tb-pgadmin4
+#  namespace: thingsboard
+spec:
+  type: ClusterIP
+  selector:
+    app: pgadmin4
+  ports:
+  - port: 80
+    name: pgadmin4-port
+---
+
+
+
