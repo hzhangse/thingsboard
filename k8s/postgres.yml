@@ -14,11 +14,46 @@
 # limitations under the License.
 #
 
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: local-storage
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: WaitForFirstConsumer
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-postgres-node-3
+  labels:
+    postgres-pvname: pv-postgres-node-3
+spec:
+  capacity:
+    storage: 5Gi
+  volumeMode: Filesystem
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-storage
+  local:
+    path: /postgres-data
+    
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - okd-node-3
+
+---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: postgres-pv-claim
-  namespace: thingsboard
+#  namespace: thingsboard
   labels:
     app: postgres
 spec:
@@ -27,12 +62,19 @@ spec:
   resources:
     requests:
       storage: 5Gi
+  storageClassName: local-storage
+  selector:
+    matchLabels:
+      postgres-pvname: pv-postgres-node-3
+
+
+            
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: postgres
-  namespace: thingsboard
+#  namespace: thingsboard
   labels:
     app: postgres
 spec:
@@ -86,7 +128,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: tb-database
-  namespace: thingsboard
+#  namespace: thingsboard
 spec:
   type: ClusterIP
   selector:
@@ -95,3 +137,55 @@ spec:
   - port: 5432
     name: postgres
 ---
+
+
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: pgadmin4
+#  namespace: thingsboard
+  labels:
+    app: pgadmin4
+spec:
+  template:
+    metadata:
+      labels:
+        app: pgadmin4
+    spec:
+      containers:
+      - name: pgadmin4
+        imagePullPolicy: Always
+        image: dpage/pgadmin4
+        ports:
+        - containerPort: 80
+          name: pgadmin4-port
+        env:
+        - name: PGADMIN_DEFAULT_EMAIL
+          value: "rainbow954@163.com"
+        - name: PGADMIN_DEFAULT_PASSWORD
+          value: "admin123"
+        volumeMounts:
+        - mountPath: /var/lib/pgadmin4
+          name: pgadmin4-data          
+      volumes:
+      - name: pgadmin4-data
+        emptyDir: {}
+      restartPolicy: Always          
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tb-pgadmin4
+#  namespace: thingsboard
+spec:
+  type: ClusterIP
+  selector:
+    app: pgadmin4
+  ports:
+  - port: 80
+    name: pgadmin4-port
+---
+
+
+

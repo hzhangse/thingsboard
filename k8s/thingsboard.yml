@@ -18,7 +18,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: zookeeper
-  namespace: thingsboard
+#  namespace: thingsboard
 spec:
   template:
     metadata:
@@ -50,7 +50,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: zookeeper
-  namespace: thingsboard
+#  namespace: thingsboard
 spec:
   type: ClusterIP
   selector:
@@ -63,7 +63,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: tb-kafka
-  namespace: thingsboard
+#  namespace: thingsboard
 spec:
   template:
     metadata:
@@ -113,7 +113,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: tb-kafka
-  namespace: thingsboard
+#  namespace: thingsboard
 spec:
   type: ClusterIP
   selector:
@@ -126,7 +126,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: tb-redis
-  namespace: thingsboard
+#  namespace: thingsboard
 spec:
   template:
     metadata:
@@ -159,7 +159,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: tb-redis
-  namespace: thingsboard
+#  namespace: thingsboard
 spec:
   type: ClusterIP
   selector:
@@ -172,9 +172,9 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: tb-js-executor
-  namespace: thingsboard
+#  namespace: thingsboard
 spec:
-  replicas: 20
+  replicas: 1
   selector:
     matchLabels:
       app: tb-js-executor
@@ -208,9 +208,9 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: tb-node
-  namespace: thingsboard
+#  namespace: thingsboard
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: tb-node
@@ -284,7 +284,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: tb-node
-  namespace: thingsboard
+#  namespace: thingsboard
 spec:
   type: ClusterIP
   selector:
@@ -297,9 +297,9 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: tb-mqtt-transport
-  namespace: thingsboard
+#  namespace: thingsboard
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: tb-mqtt-transport
@@ -358,7 +358,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: tb-mqtt-transport
-  namespace: thingsboard
+#  namespace: thingsboard
 spec:
   type: LoadBalancer
   selector:
@@ -372,9 +372,9 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: tb-http-transport
-  namespace: thingsboard
+#  namespace: thingsboard
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: tb-http-transport
@@ -433,7 +433,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: tb-http-transport
-  namespace: thingsboard
+#  namespace: thingsboard
 spec:
   type: ClusterIP
   selector:
@@ -446,9 +446,9 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: tb-coap-transport
-  namespace: thingsboard
+#  namespace: thingsboard
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: tb-coap-transport
@@ -500,7 +500,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: tb-coap-transport
-  namespace: thingsboard
+#  namespace: thingsboard
 spec:
   type: LoadBalancer
   selector:
@@ -514,9 +514,9 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: tb-web-ui
-  namespace: thingsboard
+#  namespace: thingsboard
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: tb-web-ui
@@ -559,7 +559,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: tb-web-ui
-  namespace: thingsboard
+#  namespace: thingsboard
 spec:
   type: ClusterIP
   selector:
@@ -572,7 +572,7 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: tb-ingress
-  namespace: thingsboard
+#  namespace: thingsboard
   annotations:
     nginx.ingress.kubernetes.io/use-regex: "true"
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
